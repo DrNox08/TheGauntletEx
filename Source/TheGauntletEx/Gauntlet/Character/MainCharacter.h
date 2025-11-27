@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Gauntlet/Core/InteractionComponent.h"
 #include "MainCharacter.generated.h"
 
 struct FInputActionValue;
@@ -45,6 +46,11 @@ public:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* InteractAction;
+
+	UInteractionComponent* InteractionComponent;
+
 	//Input functions
 
 	/** Called for movement input */
@@ -53,4 +59,11 @@ public:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	void Jump(const FInputActionValue& Value);
+
+	void TryInteract();
+
 };
+
+
+
