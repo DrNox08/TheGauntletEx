@@ -18,6 +18,9 @@ public:
 	ADoor();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")
+	FName KeyTagRequired;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")
 	float speed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")

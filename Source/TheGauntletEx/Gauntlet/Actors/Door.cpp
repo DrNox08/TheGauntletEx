@@ -4,6 +4,7 @@
 #include "Gauntlet/Actors/Door.h"
 
 #include "Components/BoxComponent.h"
+#include "Gauntlet/Character/MainCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -70,7 +71,20 @@ void ADoor::Interact(AActor* Interactor)
 	}
 	else
 	{
-		bIsOpen = true;
+		auto Character = Cast<AMainCharacter>(Interactor);
+		if (!Character) return;
+
+		for (auto item : Character->Inventory)
+		{
+			if (item->ActorHasTag(FName(KeyTagRequired)))
+			{
+				UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Porta sbloccata con la chiave!"), true);
+				Character->Inventory.Remove(item);
+				bIsOpen = true;
+				break;
+			}
+		}
+		
 	}
 		
 }

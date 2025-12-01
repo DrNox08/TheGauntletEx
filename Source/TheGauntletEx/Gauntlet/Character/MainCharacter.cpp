@@ -110,5 +110,10 @@ void AMainCharacter::TryInteract()
 	}
 }
 
+void AMainCharacter::CollectItem(AActor* ItemActor)
+{
+	Inventory.AddUnique(ItemActor);
+}
+
 
 
