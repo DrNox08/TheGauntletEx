@@ -17,20 +17,43 @@ public:
 	// Sets default values for this actor's properties
 	ADoor();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")
+	float speed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")
+	FVector TargetPositionSlidingDoor1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")
+	FVector TargetPositionSlidingDoor2;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	//Fields
 	
-	UPROPERTY(visibleAnywhere,BlueprintReadOnly, Category = "Door")
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Door")
 	TObjectPtr<UStaticMeshComponent> DoorMesh;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Door")
+	TObjectPtr<UStaticMeshComponent> SecondDoorMesh; // For sliding doors
 
-	UPROPERTY(visibleAnywhere,BlueprintReadOnly, Category = "Door")
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Door")
 	TObjectPtr<UStaticMeshComponent> DoorFrameMesh;
 
-	UPROPERTY(visibleAnywhere,BlueprintReadOnly, Category = "Door")
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Door")
 	TObjectPtr<UBoxComponent> DoorCollision;
+
+	FRotator InitialPivotalRotation;
+	FRotator TargetPivotalRotation;
+
+	bool bIsOpen = false;
+	
+
+	
+
+
+
 
 public:	
 	// Called every frame
@@ -38,7 +61,7 @@ public:
 
 	virtual void Interact(AActor* Interactor) override;
 
-	UPROPERTY(blueprintreadwrite, EditAnywhere, Category="Door")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Door")
 	bool isSlidingDoor = false;
 
 };

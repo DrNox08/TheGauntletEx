@@ -3,6 +3,7 @@
 
 #include "Gauntlet/Core/InteractionComponent.h"
 
+#include "Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
@@ -18,7 +19,16 @@ UInteractionComponent::UInteractionComponent()
 
 void UInteractionComponent::TryInteract()
 {
-	UKismetSystemLibrary::PrintString(GetOwner()->GetWorld(), TEXT("Trying to interact"), true);
+	if (CurrentInteractable)
+	{
+		IInteractable* Interactable = Cast<IInteractable>(CurrentInteractable);
+		
+		if (Interactable) 
+		{
+			Interactable->Interact(GetOwner());
+		}
+	}
+	
 }
 
 // Called when the game starts

@@ -9,6 +9,7 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Gauntlet/Core/InteractionComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -47,9 +48,9 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
-	// Set up action bindings
+	// Setw up action bindings
 
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
@@ -58,10 +59,20 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AMainCharacter::TryInteract);
 		
 	}
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetupInput: EnhancedInput OK"));
+		UE_LOG(LogTemp, Warning, TEXT("MoveAction      = %s"), *GetNameSafe(MoveAction));
+		UE_LOG(LogTemp, Warning, TEXT("LookAction      = %s"), *GetNameSafe(LookAction));
+		UE_LOG(LogTemp, Warning, TEXT("MouseLookAction = %s"), *GetNameSafe(MouseLookAction));
+		UE_LOG(LogTemp, Warning, TEXT("JumpAction      = %s"), *GetNameSafe(JumpAction));
+		UE_LOG(LogTemp, Warning, TEXT("InteractAction  = %s"), *GetNameSafe(InteractAction));
+	}
+
 }
 
 void AMainCharacter::Move(const FInputActionValue& Value)
@@ -88,9 +99,14 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 
 void AMainCharacter::TryInteract()
 {
+	UKismetSystemLibrary::PrintString(GetWorld(), TEXT("PREMUTO E"), true);
 	if (InteractionComponent)
 	{
 		InteractionComponent->TryInteract();
+	}
+	else
+	{
+		UKismetSystemLibrary::PrintString(GetWorld(), TEXT("No Interaction Component found"), true);
 	}
 }
 
