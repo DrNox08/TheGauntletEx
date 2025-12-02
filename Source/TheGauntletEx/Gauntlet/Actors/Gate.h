@@ -1,0 +1,49 @@
+
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "Gate.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnResetSwitches);
+
+class AGroundSwitch;
+
+UCLASS()
+class THEGAUNTLETEX_API AGate : public AActor
+{
+	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	AGate();
+
+	//Event to reset switches
+	UPROPERTY(BlueprintAssignable)
+	FOnResetSwitches OnResetSwitches;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Gate")
+	TArray<TObjectPtr<AGroundSwitch>> LinkedSwitches;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Gate")
+	TArray<int> CorrectOrderIDs;
+
+	TArray<int> ActivatedSwitchesIDs;
+
+	int CurrentSwitchIndex = 0;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable,Category ="Switch")
+	void CheckSwitches(int ActivatedSwitchID);
+
+	void Open();
+
+};
