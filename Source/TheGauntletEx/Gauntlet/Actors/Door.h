@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DoorSwitch.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Gauntlet/Core/Interactable.h"
@@ -29,6 +30,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")
 	FVector TargetPositionSlidingDoor2;
 
+	//Assing this in the details panel
+	UPROPERTY(editAnywhere, BlueprintReadWrite, Category="Door")
+	ADoorSwitch* DoorSwitchActor;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -47,13 +52,15 @@ protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Door")
 	TObjectPtr<UBoxComponent> DoorCollision;
 
+	FVector InitialPositionSlidingDoor1;
+	FVector InitialPositionSlidingDoor2;
+
 	FRotator InitialPivotalRotation;
 	FRotator TargetPivotalRotation;
 
 	bool bIsOpen = false;
-	
 
-	
+	bool bIsClosingBack = false;	
 
 
 
@@ -63,6 +70,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact(AActor* Interactor) override;
+
+	void CloseBack();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Door")
 	bool isSlidingDoor = false;

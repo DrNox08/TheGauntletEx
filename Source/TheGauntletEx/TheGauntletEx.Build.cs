@@ -18,7 +18,8 @@ public class TheGauntletEx : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
+			"Slate",
+			"GeometryCollectionEngine"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
