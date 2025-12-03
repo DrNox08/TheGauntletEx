@@ -69,6 +69,7 @@ public:
 	// Inventory
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Inventory")
 	TArray<AActor*> Inventory;
+	
 
 };
 

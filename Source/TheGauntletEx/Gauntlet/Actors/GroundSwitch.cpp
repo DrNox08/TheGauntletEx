@@ -25,6 +25,8 @@ void AGroundSwitch::BeginPlay()
 	Super::BeginPlay();
 
 	DynamicMaterialInstance = SwitchMesh->CreateAndSetMaterialInstanceDynamic(0);
+
+	GateActor->OnPuzzleCompleted.AddDynamic(this, &AGroundSwitch::DisableSwitch);
 	
 }
 
@@ -62,4 +64,9 @@ int AGroundSwitch::TouchTriggered()
 
 void AGroundSwitch::ResetSwitch()
 {
+}
+
+void AGroundSwitch::DisableSwitch()
+{
+	BoxCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

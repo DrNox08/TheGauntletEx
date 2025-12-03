@@ -60,4 +60,7 @@ public:
 
 	UFUNCTION(blueprintCallable, Category ="Switch")
 	void ResetSwitch();
+
+	UFUNCTION()
+	void DisableSwitch();
 };

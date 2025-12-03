@@ -7,6 +7,7 @@
 #include "Gate.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnResetSwitches);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPuzzleCompleted);
 
 class AGroundSwitch;
 
@@ -22,6 +23,8 @@ public:
 	//Event to reset switches
 	UPROPERTY(BlueprintAssignable)
 	FOnResetSwitches OnResetSwitches;
+
+	FOnPuzzleCompleted OnPuzzleCompleted;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Gate")
 	TArray<TObjectPtr<AGroundSwitch>> LinkedSwitches;

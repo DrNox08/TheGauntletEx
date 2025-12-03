@@ -25,7 +25,7 @@ void ADoorKey::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	float IncrementRotation = 20.f * DeltaTime;
+	float IncrementRotation = 60.f * DeltaTime;
 	FRotator CurrentRotation = GetActorRotation();
 	CurrentRotation.Roll += IncrementRotation;
 	SetActorRotation(CurrentRotation);

@@ -104,7 +104,7 @@ void AGate::Open()
 		true
 	);
 
-	//TODO: DISABLE COLLISION FOR EVERY SWITCH
+	OnPuzzleCompleted.Broadcast();
 	
 	
 	

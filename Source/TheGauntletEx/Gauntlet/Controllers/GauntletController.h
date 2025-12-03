@@ -28,5 +28,10 @@ class THEGAUNTLETEX_API AGauntletController : public APlayerController
 
 	virtual void SetupInputComponent() override;
 	
+public:
+	
+	UFUNCTION(BlueprintCallable)
+	void RemoveInputs();
+	
 	
 };

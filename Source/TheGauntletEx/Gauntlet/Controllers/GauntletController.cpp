@@ -29,4 +29,15 @@ void AGauntletController::SetupInputComponent()
 	}
 }
 
+void AGauntletController::RemoveInputs()
+{
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
+		{
+			Subsystem->RemoveMappingContext(CurrentContext);
+		}
+	}
+}
+
 
