@@ -32,6 +32,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Gate")
 	TArray<int> CorrectOrderIDs;
 
+	// Gate movement
+	UPROPERTY(EditAnywhere, Category ="Gate")
+	float MoveDuration = 2.f;
+
+	UPROPERTY(EditAnywhere, Category ="Gate")
+	float MoveHeight = 500.f;
+
+	FTimerHandle GateTimerHandle;
+	float ElapsedTime = 0.f;
+	FVector StartLocation;
+	FVector EndLocation;
+	//------------------------------------
 	TArray<int> ActivatedSwitchesIDs;
 
 	int CurrentSwitchIndex = 0;
@@ -39,6 +51,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void UpdateGateMovement();
 
 public:	
 	// Called every frame

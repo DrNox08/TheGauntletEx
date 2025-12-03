@@ -22,6 +22,7 @@ void AGate::BeginPlay()
 	Super::BeginPlay();
 }
 
+
 // Called every frame
 void AGate::Tick(float DeltaTime)
 {
@@ -33,7 +34,8 @@ void AGate::CheckSwitches(int ActivatedSwitchID)
 {
 	ActivatedSwitchesIDs.Add(ActivatedSwitchID);
 	FString TotatlyActivated = FString::FromInt(ActivatedSwitchesIDs.Num());
-	UKismetSystemLibrary::PrintString(GetWorld(), FString::Printf(TEXT("Activated Switches: %s"), *TotatlyActivated), true);
+	UKismetSystemLibrary::PrintString(GetWorld(), FString::Printf(TEXT("Activated Switches: %s"), *TotatlyActivated),
+	                                  true);
 
 	if (ActivatedSwitchesIDs[CurrentSwitchIndex] == CorrectOrderIDs[CurrentSwitchIndex])
 	{
@@ -47,65 +49,50 @@ void AGate::CheckSwitches(int ActivatedSwitchID)
 		CurrentSwitchIndex = 0;
 		OnResetSwitches.Broadcast();
 	}
-	
 }
-		
-	
-	
-		
-	
+
 
 void AGate::Open()
 {
-	UKismetSystemLibrary::PrintString(GetWorld(), TEXT("GATE OPEN"), true);
+	UKismetSystemLibrary::PrintString(GetWorld(), TEXT("GATE OPENED!"), true);
 
-	// Static = sopravvivono dopo l'uscita dalla funzione
-	static float Time = 0.0f;
-	static FTimerHandle TimerHandle;
-
-	// Imposto i parametri del movimento
-	const float MoveDuration = 10.0f;           // secondi
-	const float TimerRate   = 0.01f;           // intervallo chiamata Timer
-
-	// Prendo posizione iniziale ogni volta che chiamo Open (così se richiami, riparte da dove è)
-	const FVector StartLocation = GetActorLocation();
-	const FVector EndLocation   = StartLocation + FVector(0.f, 0.f, 500.f);
-
-	// Reset del tempo ogni volta che fai partire il movimento
-	Time = 0.0f;
-
-	// Se esiste un timer precedente su questa funzione, lo fermo prima di ripartire
-	GetWorldTimerManager().ClearTimer(TimerHandle);
-
-	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindLambda([this, StartLocation, EndLocation, MoveDuration, TimerRate]()
+	if (OnPuzzleCompleted.IsBound())
 	{
-		// Incremento il tempo in base al rate del timer
-		Time += TimerRate;
+		OnPuzzleCompleted.Broadcast();
+	}
 
-		float Alpha = FMath::Clamp(Time / MoveDuration, 0.0f, 1.0f);
-		FVector NewLocation = FMath::Lerp(StartLocation, EndLocation, Alpha);
-		SetActorLocation(NewLocation);
+	// Save initial pos and target pos
+	StartLocation = GetActorLocation();
+	EndLocation = StartLocation + FVector(0.f, 0.f, MoveHeight);
 
-		if (Alpha >= 1.0f)
-		{
-			// Movimento completato: fermo il timer
-			GetWorldTimerManager().ClearTimer(TimerHandle);
-			Time = 0.0f; // opzionale: reset per riutilizzare Open()
-			UKismetSystemLibrary::PrintString(GetWorld(), TEXT("GATE MOVEMENT DONE"), true);
-		}
-	});
+	//Reset timer
+	ElapsedTime = 0.f;
 
-	// Avvio del timer (looping = true, ma lo fermiamo noi quando Alpha >= 1)
-	GetWorldTimerManager().SetTimer(
-		TimerHandle,
-		TimerDelegate,
-		TimerRate,
-		true
-	);
+	//Clear any timer
+	GetWorldTimerManager().ClearTimer(GateTimerHandle);
 
-	OnPuzzleCompleted.Broadcast();
-	
-	
-	
+	const float TimeRate = 0.02f;
+
+	//Start time that calls a function to update gate movement
+	GetWorldTimerManager().SetTimer(GateTimerHandle, this, &AGate::UpdateGateMovement, TimeRate, true);
+}
+
+void AGate::UpdateGateMovement()
+{
+	if (!GetWorld()) return;
+
+	const float TimeRate = 0.02f;
+	ElapsedTime += TimeRate;
+
+	float Alpha = FMath::Clamp(ElapsedTime/MoveDuration, 0.f, 1.f);
+	FVector NewLocation = FMath::Lerp(StartLocation, EndLocation, Alpha);
+	SetActorLocation(NewLocation);
+
+	if (Alpha>=1.f)
+	{
+		GetWorldTimerManager().ClearTimer(GateTimerHandle);
+		ElapsedTime = 0.f;
+
+		UKismetSystemLibrary::PrintString(GetWorld(), TEXT("GATE FINISHED!"), true);
+	}
 }

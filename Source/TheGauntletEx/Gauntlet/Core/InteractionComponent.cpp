@@ -19,7 +19,7 @@ UInteractionComponent::UInteractionComponent()
 
 void UInteractionComponent::TryInteract()
 {
-	if (CurrentInteractable)
+	if (IsValid(CurrentInteractable))
 	{
 		IInteractable* Interactable = Cast<IInteractable>(CurrentInteractable);
 		
@@ -53,6 +53,10 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 void UInteractionComponent::ScanInteractable()
 {
+	//Reset
+	ActorsFound.Empty();
+	CurrentInteractable = nullptr;
+	
 	AActor* Owner = GetOwner();
 	if(!Owner) return;
 	
@@ -62,7 +66,7 @@ void UInteractionComponent::ScanInteractable()
 
 	TArray<FHitResult> Hits;
 	TArray<AActor*> ActorsToIgnore;
-
+	
 	UKismetSystemLibrary::SphereTraceMultiForObjects(
 		this->GetOwner()->GetWorld(),
 		Start,
@@ -82,14 +86,17 @@ void UInteractionComponent::ScanInteractable()
 	}
 
 	float minDistance = FLT_MAX;
-
+	
 	for (AActor* Actor : ActorsFound)
 	{
-		float distance = FVector::Dist(Actor->GetActorLocation(), Owner->GetActorLocation());
-		if (distance < minDistance)
+		if (IsValid(Actor))
 		{
-			minDistance = distance;
-			CurrentInteractable = Actor;
+			float distance = FVector::Dist(Actor->GetActorLocation(), Owner->GetActorLocation());
+			if (distance < minDistance)
+			{
+				minDistance = distance;
+				CurrentInteractable = Actor;
+			}
 		}
 	}
 
