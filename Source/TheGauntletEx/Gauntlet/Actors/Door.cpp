@@ -117,7 +117,7 @@ void ADoor::Tick(float DeltaTime)
 
 void ADoor::Interact(AActor* Interactor)
 {
-	UKismetSystemLibrary::PrintString(GetWorld(), TEXT("APERTURA PORTA"), true);
+	//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("APERTURA PORTA"), true);
 	if (isSlidingDoor)
 	{
 		bIsOpen = true;
@@ -129,6 +129,11 @@ void ADoor::Interact(AActor* Interactor)
 
 		for (auto item : Character->Inventory)
 		{
+			if (!IsValid(item))
+			{
+				UKismetSystemLibrary::PrintString(GetWorld(), TEXT("CHIAVE MANCANTE"), true);
+				return;
+			}
 			if (item->ActorHasTag(FName(KeyTagRequired)))
 			{
 				UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Porta sbloccata con la chiave!"), true);

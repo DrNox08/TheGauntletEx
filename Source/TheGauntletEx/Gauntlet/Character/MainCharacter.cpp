@@ -33,7 +33,9 @@ void AMainCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	InteractionComponent = FindComponentByClass<UInteractionComponent>();
-	
+
+	// FString string = FString::FromInt(Inventory.Num());
+	// UKismetSystemLibrary::PrintString(GetWorld(), FString::Printf(TEXT("Inventory inizial)e size: %s"), *string), true);
 }
 
 // Called every frame
