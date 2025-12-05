@@ -2,6 +2,7 @@
 - **WASD** — Move
 - **E** — Interact
 - **Spacebar** — Jump
+- **P** - Pause
 
 ---
 
